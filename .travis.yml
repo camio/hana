@@ -158,9 +158,10 @@ install:
   # Install libstdc++ shipped with GCC 5.1.0
   ############################################################################
   - LIBSTDCXX_URL="https://github.com/gcc-mirror/gcc/archive/gcc-5_1_0-release.tar.gz"
-  - mkdir gcc
+  - mkdir -p gcc gcc/build gcc/prefix
   - travis_retry wget --quiet -O - ${LIBSTDCXX_URL} | tar --strip-components=1 -xz -C gcc
-  - cd gcc && mkdir build prefix && cd build
+  - cd gcc/build
+  - travis_retry ../contrib/download_prerequisites
   - ../configure --disable-bootstrap --enable-languages=c++ --prefix=${PWD}/../prefix
   - make all-target-libstdc++-v3 -j2 && make install-target-libstdc++-v3
   - cd ${DEPS_DIR}
