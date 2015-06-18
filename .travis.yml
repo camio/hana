@@ -155,6 +155,16 @@ install:
   - (cd llvm/build && cmake .. -DCMAKE_CXX_COMPILER=clang++ && make cxx -j2)
 
   ############################################################################
+  # Install libstdc++ shipped with GCC 5.1.0
+  ############################################################################
+  - LIBSTDCXX_URL="http://gcc.skazkaforyou.com/releases/gcc-5.1.0/gcc-5.1.0.tar.gz"
+  - travis_retry wget --quiet -O - ${LIBSTDCXX_URL} | tar --strip-components=1 -xz -C gcc
+  - cd gcc && mkdir build prefix && cd build
+  - ../configure --disable-bootstrap --enable-languages=c++ --prefix=${PWD}/../prefix
+  - make all-target-libstdc++-v3 -j2 && make install-target-libstdc++-v3
+  - cd ${DEPS_DIR}
+
+  ############################################################################
   # Install a recent Doxygen
   ############################################################################
   - DOXYGEN_URL="http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.9.1.linux.bin.tar.gz"
